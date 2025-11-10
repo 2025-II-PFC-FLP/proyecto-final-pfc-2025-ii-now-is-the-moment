@@ -8,11 +8,11 @@
 
 ## 👥 Integrantes del Grupo
 
-| Nombre Completo | Código | Rol            | Correo Electrónico        |
-| --------------- | ------ | -------------- | ------------------------- |
-| [Estudiante 1]  | 123456 | [Líder/Colab.] | [correo1@institucion.edu] |
-| [Estudiante 2]  | 123457 | [Colaborador]  | [correo2@institucion.edu] |
-| [Estudiante 3]  | 123458 | [Colaborador]  | [correo3@institucion.edu] |
+| Nombre Completo            | Código    | Rol           | Correo Electrónico                         |
+|----------------------------|-----------|---------------|--------------------------------------------|
+| Juan Esteban Perez Ramirez | 202459486 | [Líderisimo]  | [juan.perez.ramirez@correounivalle.edu.co] |
+| [Estudiante 2]             | 123457    | [Colaborador] | [correo2@institucion.edu]                  |
+| [Estudiante 3]             | 123458    | [Colaborador] | [correo3@institucion.edu]                  |
 
 ---
 
