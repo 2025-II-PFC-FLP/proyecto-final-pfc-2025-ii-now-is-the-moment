@@ -8,13 +8,13 @@
 
 ## 👥 Integrantes del Grupo
 
-| Nombre Completo            | Código    | Rol           | Correo Electrónico                         |
-|----------------------------|-----------|---------------|--------------------------------------------|
-| Juan Esteban Perez Ramirez | 202459486 | [Líderisimo]  | [juan.perez.ramirez@correounivalle.edu.co] |
-| Bryan Steven Ospina        | 202459353 | [Colaborador] | [bryan.steven.ospina@correounivalle.edu.co]|
-| Lopez Botero Karen         | 202459519 | [Colaborador] | [karen.sofia.lopez@correounivalle.edu.co]  |
-| [Estudiante 4]             | 123458    | [Colaborador] | [correo3@institucion.edu]                  |
-| [Estudiante 5]             | 123458    | [Colaborador] | [correo3@institucion.edu]                  |
+| Nombre Completo             | Código    | Rol           | Correo Electrónico                          |
+|-----------------------------|-----------|---------------|---------------------------------------------|
+| Juan Esteban Perez Ramirez  | 202459486 | [Líderisimo]  | [juan.perez.ramirez@correounivalle.edu.co]  |
+| Bryan Steven Ospina         | 202459353 | [Colaborador] | [bryan.steven.ospina@correounivalle.edu.co] |
+| Lopez Botero Karen          | 202459519 | [Colaborador] | [karen.sofia.lopez@correounivalle.edu.co]   |
+| Marlen Lizeth Estrada López | 202359494 | [Colaborador] | [marlen.estrada@correounivalle.edu.co]                            |
+| [Estudiante 5]              | 123458    | [Colaborador] | [correo3@institucion.edu]                   |
 ---
 
 ## 📌 Descripción de la Asignación
