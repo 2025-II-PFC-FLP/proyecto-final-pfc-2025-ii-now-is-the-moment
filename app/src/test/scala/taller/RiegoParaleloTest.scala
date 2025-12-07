@@ -7,21 +7,15 @@ import org.scalatestplus.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class RiegoParaleloTest extends AnyFunSuite {
 
-  // Importamos tanto la versión secuencial (para comparar) como la paralela
   import RiegoOptimo._
   import RiegoParalelo._
 
-  // ==========================================
-  // DATOS DE PRUEBA
-  // ==========================================
-
-  // Finca del Ejemplo 1 del PDF
   val fincaPDF: Finca = Vector(
-    (10, 3, 4), // T0
-    (5, 3, 3),  // T1
-    (2, 2, 1),  // T2
-    (8, 1, 1),  // T3
-    (6, 4, 2)   // T4
+    (10, 3, 4),
+    (5, 3, 3),
+    (2, 2, 1),
+    (8, 1, 1),
+    (6, 4, 2)
   )
 
   val distPDF: Distancia = Vector(
@@ -32,48 +26,124 @@ class RiegoParaleloTest extends AnyFunSuite {
     Vector(4, 6, 2, 4, 0)
   )
 
-  // ==========================================
-  // TESTS PARALELOS
-  // ==========================================
-
-  test("costoRiegoFincaPar debe dar el mismo resultado que la secuencial") {
-    // Probamos con una permutación arbitraria
+  test("costoRiegoFincaPar: caso simple secuencial vs paralelo") {
     val pi = Vector(0, 1, 2, 3, 4)
-    val costoSeq = costoRiegoFinca(fincaPDF, pi)
-    val costoPar = costoRiegoFincaPar(fincaPDF, pi)
-
-    assert(costoPar == costoSeq, s"El costo paralelo ($costoPar) difiere del secuencial ($costoSeq)")
+    assert(costoRiegoFincaPar(fincaPDF, pi) == costoRiegoFinca(fincaPDF, pi))
   }
 
-  test("costoMovilidadPar debe dar el mismo resultado que la secuencial") {
+  test("costoRiegoFincaPar: permutación invertida") {
     val pi = Vector(4, 3, 2, 1, 0)
-    val costoSeq = costoMovilidad(fincaPDF, pi, distPDF)
-    val costoPar = costoMovilidadPar(fincaPDF, pi, distPDF)
-
-    assert(costoPar == costoSeq, s"El costo movilidad paralelo ($costoPar) difiere del secuencial ($costoSeq)")
+    assert(costoRiegoFincaPar(fincaPDF, pi) == costoRiegoFinca(fincaPDF, pi))
   }
 
-  test("ProgramacionRiegoOptimoPar debe encontrar el mismo COSTO MÍNIMO que la secuencial") {
-    // No necesariamente la misma permutación (pueden haber varias óptimas), pero sí el mismo costo.
-    val (_, costoMinSeq) = ProgramacionRiegoOptimo(fincaPDF, distPDF)
-    val (progPar, costoMinPar) = ProgramacionRiegoOptimoPar(fincaPDF, distPDF)
-
-    assert(costoMinPar == costoMinSeq, s"El óptimo paralelo ($costoMinPar) no coincide con el secuencial ($costoMinSeq)")
-
-    // Verificamos que el costo reportado sea real calculándolo de nuevo
-    val costoRealCalculado = costoRiegoFinca(fincaPDF, progPar) + costoMovilidad(fincaPDF, progPar, distPDF)
-    assert(costoMinPar == costoRealCalculado, "El costo devuelto por la función óptima no coincide con el cálculo real de esa programación")
+  test("costoRiegoFincaPar: permutación aleatoria") {
+    val pi = Vector(1, 3, 0, 4, 2)
+    assert(costoRiegoFincaPar(fincaPDF, pi) == costoRiegoFinca(fincaPDF, pi))
   }
 
-  test("Prueba de estrés ligera: Finca aleatoria") {
-    // Generamos una finca pequeña aleatoria para verificar que no explota el paralelismo
-    val len = 6
-    val f = fincaAlAzar(len)
-    val d = distanciaAlAzar(len)
+  test("costoRiegoFincaPar: finca aleatoria pequeña") {
+    val f = fincaAlAzar(4)
+    val pi = Vector(0, 1, 2, 3)
+    assert(costoRiegoFincaPar(f, pi) == costoRiegoFinca(f, pi))
+  }
 
-    val (prog, costo) = ProgramacionRiegoOptimoPar(f, d)
+  test("costoRiegoFincaPar: finca de 1 tablón") {
+    val f = Vector((5, 2, 3))
+    val pi = Vector(0)
+    assert(costoRiegoFincaPar(f, pi) == costoRiegoFinca(f, pi))
+  }
 
-    assert(prog.length == len)
-    assert(prog.toSet == (0 until len).toSet) // Debe ser una permutación válida
+  test("costoMovilidadPar: básico coincide con secuencial") {
+    val pi = Vector(0, 1, 2, 3, 4)
+    assert(costoMovilidadPar(fincaPDF, pi, distPDF) == costoMovilidad(fincaPDF, pi, distPDF))
+  }
+
+  test("costoMovilidadPar: orden invertido coincide") {
+    val pi = Vector(4, 3, 2, 1, 0)
+    assert(costoMovilidadPar(fincaPDF, pi, distPDF) == costoMovilidad(fincaPDF, pi, distPDF))
+  }
+
+  test("costoMovilidadPar: permutación intermedia coincide") {
+    val pi = Vector(2, 4, 1, 0, 3)
+    assert(costoMovilidadPar(fincaPDF, pi, distPDF) == costoMovilidad(fincaPDF, pi, distPDF))
+  }
+
+  test("costoMovilidadPar: finca aleatoria") {
+    val f = fincaAlAzar(5)
+    val d = distanciaAlAzar(5)
+    val pi = Vector(0, 1, 2, 3, 4)
+    assert(costoMovilidadPar(f, pi, d) == costoMovilidad(f, pi, d))
+  }
+
+  test("costoMovilidadPar: finca de un tablón (0 costo)") {
+    val f = Vector((3, 1, 1))
+    val d = Vector(Vector(0))
+    val pi = Vector(0)
+    assert(costoMovilidadPar(f, pi, d) == 0)
+  }
+
+  test("generarProgramacionesRiegoPar: tamaño 0") {
+    assert(generarProgramacionesRiegoPar(Vector()).isEmpty)
+  }
+
+  test("generarProgramacionesRiegoPar: tamaño 1") {
+    val f = Vector((5, 2, 3))
+    assert(generarProgramacionesRiegoPar(f) == Vector(Vector(0)))
+  }
+
+  test("generarProgramacionesRiegoPar: tamaño 2 produce 2 permutaciones") {
+    val f = Vector((1, 1, 1), (2, 2, 2))
+    val esperado = Vector(Vector(0,1), Vector(1,0))
+    val obtenido = generarProgramacionesRiegoPar(f).sortBy(_.mkString)
+    assert(obtenido == esperado)
+  }
+
+//
+
+  test("generarProgramacionesRiegoPar produce todas las permutaciones sin repetir") {
+    val f = fincaAlAzar(4)
+    val perms = generarProgramacionesRiegoPar(f)
+    assert(perms.distinct.size == perms.size)
+    assert(perms.size == 24)
+  }
+
+
+  test("ProgramacionRiegoOptimoPar da mismo costo mínimo que el secuencial (PDF)") {
+    val (_, cSeq) = ProgramacionRiegoOptimo(fincaPDF, distPDF)
+    val (_, cPar) = ProgramacionRiegoOptimoPar(fincaPDF, distPDF)
+    assert(cSeq == cPar)
+  }
+
+  test("ProgramacionRiegoOptimoPar: finca aleatoria tamaño 5") {
+    val f = fincaAlAzar(5)
+    val d = distanciaAlAzar(5)
+    val (_, cSeq) = ProgramacionRiegoOptimo(f, d)
+    val (_, cPar) = ProgramacionRiegoOptimoPar(f, d)
+    assert(cSeq == cPar)
+  }
+
+  test("ProgramacionRiegoOptimoPar: finca de tamaño 1") {
+    val f = Vector((4,2,3))
+    val d = Vector(Vector(0))
+    val (pi, costo) = ProgramacionRiegoOptimoPar(f, d)
+    assert(pi == Vector(0))
+    assert(costo == 4 - (0 + 2))
+  }
+
+  test("ProgramacionRiegoOptimoPar encuentra un costo válido real") {
+    val f = fincaAlAzar(4)
+    val d = distanciaAlAzar(4)
+    val (pi, costo) = ProgramacionRiegoOptimoPar(f, d)
+
+    val costoReal = costoRiegoFinca(f, pi) + costoMovilidad(f, pi, d)
+    assert(costo == costoReal)
+  }
+
+  test("ProgramacionRiegoOptimoPar retorna permutación válida") {
+    val f = fincaAlAzar(5)
+    val d = distanciaAlAzar(5)
+
+    val (pi, _) = ProgramacionRiegoOptimoPar(f, d)
+    assert(pi.toSet == (0 until 5).toSet)
   }
 }

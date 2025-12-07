@@ -3,14 +3,7 @@ package taller
 import scala.collection.parallel.CollectionConverters._
 
 object RiegoParalelo {
-
-  // Importamos todo de RiegoOptimo para reusar los tipos (Finca, Tablon, etc.)
-  // y las funciones secuenciales básicas si es necesario.
   import RiegoOptimo._
-
-  // ========================================================
-  // 3.1 Paralelizando el cálculo de costos
-  // ========================================================
 
   /**
    * Calcula el costo total de riego en paralelo.
@@ -43,11 +36,6 @@ object RiegoParalelo {
       }.sum
     }
   }
-
-  // ========================================================
-  // 3.2 Paralelizando la generación de programaciones
-  // ========================================================
-
   /**
    * Genera las programaciones posibles.
    * La generación de permutaciones es difícil de paralelizar eficientemente en su creación,
@@ -59,10 +47,6 @@ object RiegoParalelo {
     if (n == 0) Vector.empty
     else indices.permutations.map(_.toVector).toVector
   }
-
-  // ========================================================
-  // 3.3 Paralelizando la programación óptima
-  // ========================================================
 
   /**
    * Calcula la programación óptima procesando las opciones en paralelo.

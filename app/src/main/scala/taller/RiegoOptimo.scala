@@ -1,5 +1,3 @@
-// RiegoOptimo.scala — versión secuencial corregida
-
 package taller
 
 import scala.annotation.tailrec
@@ -36,7 +34,7 @@ object RiegoOptimo {
       else v(j)(i))
   }
 
-  // 2.3 tIR — tiempo inicio riego CORREGIDO
+  // 2.3 tIR — tiempo inicio riego
   def tIR(f: Finca, pi: ProgRiego): TiempoInicioRiego = {
     val n = f.length
 
@@ -94,7 +92,7 @@ object RiegoOptimo {
     if (n <= 1) 0 else aux(0, 0)
   }
 
-  // 2.5 generarProgramacionesRiego - versión funcional pura
+  // 2.5 generarProgramacionesRiego
   def generarProgramacionesRiego(f: Finca): Vector[ProgRiego] = {
     val indices = (0 until f.length).toVector
 
@@ -111,7 +109,7 @@ object RiegoOptimo {
     permutaciones(indices)
   }
 
-  // 2.6 ProgramacionRiegoOptimo - versión corregida
+  // 2.6 ProgramacionRiegoOptimo
   def ProgramacionRiegoOptimo(f: Finca, d: Distancia): (ProgRiego, Int) = {
     val todas = generarProgramacionesRiego(f)
 
@@ -144,41 +142,5 @@ object RiegoOptimo {
     println(s"Costo movilidad: ${costoMovilidad(f, pi, d)}")
     println(s"Costo total: ${costoRiegoFinca(f, pi) + costoMovilidad(f, pi, d)}")
     println("---")
-  }
-
-  // Ejemplo de uso con los datos del PDF
-  def ejemploDelPDF(): Unit = {
-    println("=== EJEMPLO 1 DEL PDF ===")
-
-    val F1: Finca = Vector(
-      (10, 3, 4), // tablón 0
-      (5, 3, 3),  // tablón 1
-      (2, 2, 1),  // tablón 2
-      (8, 1, 1),  // tablón 3
-      (6, 4, 2)   // tablón 4
-    )
-
-    val DF1: Distancia = Vector(
-      Vector(0, 2, 2, 4, 4),
-      Vector(2, 0, 4, 2, 6),
-      Vector(2, 4, 0, 2, 2),
-      Vector(4, 2, 2, 0, 4),
-      Vector(4, 6, 2, 4, 0)
-    )
-
-    val pi1 = Vector(0, 1, 4, 2, 3)
-    val pi2 = Vector(2, 1, 4, 3, 0)
-
-    println("Programación Π1:")
-    mostrarProgramacion(F1, pi1, DF1)
-
-    println("Programación Π2:")
-    mostrarProgramacion(F1, pi2, DF1)
-
-    // Buscar la óptima
-    println("Buscando programación óptima...")
-    val (optima, costoOptimo) = ProgramacionRiegoOptimo(F1, DF1)
-    println(s"Programación óptima encontrada: ${optima.mkString("[", ", ", "]")}")
-    println(s"Costo óptimo: $costoOptimo")
   }
 }
