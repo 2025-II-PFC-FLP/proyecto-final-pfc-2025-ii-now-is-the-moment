@@ -6,7 +6,7 @@ import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class RiegoParaleloTest extends AnyFunSuite {
-
+//prueva
   import RiegoOptimo._
   import RiegoParalelo._
 
