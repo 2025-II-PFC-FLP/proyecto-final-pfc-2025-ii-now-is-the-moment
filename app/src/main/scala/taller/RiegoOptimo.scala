@@ -2,6 +2,7 @@
 
 package taller
 
+import scala.annotation.tailrec
 import scala.util.Random
 
 object RiegoOptimo {
@@ -39,6 +40,7 @@ object RiegoOptimo {
   def tIR(f: Finca, pi: ProgRiego): TiempoInicioRiego = {
     val n = f.length
 
+    @tailrec
     def calcularTiempos(j: Int, tiempoAcumulado: Int, resultados: Vector[Int]): Vector[Int] = {
       if (j >= n) resultados
       else {
@@ -67,6 +69,7 @@ object RiegoOptimo {
 
   // 2.4 costoRiegoFinca
   def costoRiegoFinca(f: Finca, pi: ProgRiego): Int = {
+    @tailrec
     def aux(i: Int, acum: Int): Int = {
       if (i == f.length) acum
       else aux(i + 1, acum + costoRiegoTablon(i, f, pi))
@@ -78,6 +81,7 @@ object RiegoOptimo {
   def costoMovilidad(f: Finca, pi: ProgRiego, d: Distancia): Int = {
     val n = pi.length
 
+    @tailrec
     def aux(j: Int, acum: Int): Int = {
       if (j == n - 1) acum
       else {
