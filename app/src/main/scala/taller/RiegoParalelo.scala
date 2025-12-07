@@ -83,8 +83,9 @@ object RiegoParalelo {
         // pero usaremos las Par para cumplir el requisito de usar todo paralelo si se desea.
         // Sin embargo, lo más eficiente es paralelizar el "bucle externo" (este map).
 
-        val cr = costoRiegoFinca(f, pi) // Usamos la secuencial interna, el paralelismo está en 'todas.par'
-        val cm = costoMovilidad(f, pi, d)
+        val cr = costoRiegoFincaPar(f, pi)
+        val cm = costoMovilidadPar(f, pi, d)
+
         (pi, cr + cm)
       }
 
