@@ -88,7 +88,7 @@ La selección final de la permutación óptima también es secuencial, aunque su
 
 ---
 
-# 3. Resultados obtenidos y análisis (NUEVOS RESULTADOS)
+# 3. Resultados obtenidos y análisis 
 
 Las pruebas se realizaron con tamaños de 6 a 10 tablones.  
 Los tiempos obtenidos fueron:
