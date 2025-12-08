@@ -3,6 +3,34 @@ package taller
 import scala.annotation.tailrec
 import scala.util.Random
 
+
+//explicacion
+// cada posicion en un vector es un tablon
+//la distancia tiene un costo al moverse
+//progriego es el orden en que se riegan los tablones
+//Un vector de tamaño n donde la posición i te dice:
+//en qué tiempo REAL empieza a regarse el tablón i.
+
+//tIR(f, pi) devuelve un vector donde:
+//La posición i contiene el tiempo en que empieza a regarse el tablón i.
+//Busca qué tablón toca en este turno: tablonActual = pi(j)
+//Si j==0 → empieza en 0
+//Guarda en resultados el tiempo de inicio
+//Suma al acumulado el tiempo de riego de ese tablón
+
+//Cuando el tablón se comenzó a regar después del límite, se penaliza:
+//el exceso de tiempo
+//multiplicado por la prioridad
+
+//costo de movilidad
+//acum + d(tablonActual)(tablonSiguiente)
+//Se suman las distancias entre turnos consecutivos de la programación
+
+//def ProgramacionRiegoOptimo(f, d): (ProgRiego, Int)
+//Genera todas las permutaciones
+//Calcula CR + CM para cada una
+//Se queda con la de menor costo total
+
 object RiegoOptimo {
   type Tablon = (Int, Int, Int)
   type Finca = Vector[Tablon]
@@ -11,9 +39,14 @@ object RiegoOptimo {
   type TiempoInicioRiego = Vector[Int]
 
   // Funciones de acceso a los datos del tablón
-  def tsup(f: Finca, i: Int): Int = f(i)._1
-  def treg(f: Finca, i: Int): Int = f(i)._2
-  def prio(f: Finca, i: Int): Int = f(i)._3
+  def tsup(f: Finca, i: Int): Int = f(i)._1 //tiempo maximo sin resibir agua
+  def treg(f: Finca, i: Int): Int = f(i)._2 //tiempo necesario para regar
+  def prio(f: Finca, i: Int): Int = f(i)._3 //prioridad
+//Son funciones puras y simples para acceder a cada campo del tablón.
+  // mejora legibilidad
+  // evita errores
+  //permite cambiar la estructura sin cambiar el resto del código
+
 
   // 2.1 Generación de entradas aleatorias
   val random = new Random()
