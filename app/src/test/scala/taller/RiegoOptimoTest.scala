@@ -7,13 +7,7 @@ import org.scalatestplus.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class RiegoOptimoTest extends AnyFunSuite {
 
-  // Importamos las funciones del objeto principal.
-  // Asegúrate de que tu objeto se llame RiegoOptimo
   import RiegoOptimo._
-
-  // ==========================================
-  // DATOS DE PRUEBA (FIXTURES)
-  // ==========================================
 
   // Finca Pequeña (3 tablones)
   // T0: (10, 3, 4) -> Sobrevive 10, Riego 3, Prio 4
@@ -31,7 +25,7 @@ class RiegoOptimoTest extends AnyFunSuite {
     Vector(4, 2, 0)
   )
 
-  // Finca del Ejemplo 1 del PDF
+
   val fincaPDF: Finca = Vector(
     (10, 3, 4), // T0
     (5, 3, 3),  // T1
@@ -103,10 +97,6 @@ class RiegoOptimoTest extends AnyFunSuite {
     assert(tIR(fincaUno, pi) == Vector(0))
   }
 
-  // ==========================================
-  // 2. TESTS PARA costoRiegoTablon
-  // ==========================================
-
   test("costoRiegoTablon Test 1: Cultivo sano (Tiempo sobra)") {
     // T0: (10, 3, 4). Si inicia en 0, termina en 3.
     // 10 - 3 = 7. 7 >= 0. Costo: 10 - 3 = 7.
@@ -152,10 +142,6 @@ class RiegoOptimoTest extends AnyFunSuite {
     assert(costoRiegoTablon(1, fincaPeque, pi) == 3)
   }
 
-  // ==========================================
-  // 3. TESTS PARA costoRiegoFinca
-  // ==========================================
-
   test("costoRiegoFinca Test 1: Suma simple fincaPequeña") {
     // Prog: (0, 1, 2)
     // T0 (inicia 0, fin 3): Sano. Costo 10 - 3 = 7
@@ -166,14 +152,14 @@ class RiegoOptimoTest extends AnyFunSuite {
     assert(costoRiegoFinca(fincaPeque, pi) == 16)
   }
 
-  test("costoRiegoFinca Test 2: Ejemplo 1 del PDF") {
-    // Según PDF, para F1 y PI1 (0, 1, 4, 2, 3) el costo de riego es 33.
+  test("costoRiegoFinca Test 2") {
+    //  para F1 y PI1 (0, 1, 4, 2, 3) el costo de riego es 33.
     // Cálculos PDF: 7 + 3 + 10 + 5 + 8 = 33.
     val pi = Vector(0, 1, 4, 2, 3)
     assert(costoRiegoFinca(fincaPDF, pi) == 33)
   }
 
-  test("costoRiegoFinca Test 3: Ejemplo 2 del PDF") {
+  test("costoRiegoFinca Test 3") {
     // Según PDF, para F1 y PI2 (2, 1, 4, 3, 0) el costo de riego es 20.
     val pi = Vector(2, 1, 4, 3, 0)
     assert(costoRiegoFinca(fincaPDF, pi) == 20)
@@ -200,10 +186,6 @@ class RiegoOptimoTest extends AnyFunSuite {
     val pi = Vector(0, 1)
     assert(costoRiegoFinca(fincaRelax, pi) == 197)
   }
-
-  // ==========================================
-  // 4. TESTS PARA costoMovilidad
-  // ==========================================
 
   test("costoMovilidad Test 1: FincaPeque camino (0, 1, 2)") {
     // Camino 0 -> 1 -> 2
@@ -244,12 +226,8 @@ class RiegoOptimoTest extends AnyFunSuite {
     assert(costoMovilidad(fincaPeque, pi, distPeque) == 6)
   }
 
-  // ==========================================
-  // 5. TESTS PARA ProgramacionRiegoOptimo
-  // ==========================================
-
   test("Optimo Test 1: Verificar optimo manual en FincaPeque") {
-    // Vamos a calcular las 6 permutaciones posibles de FincaPeque manualmente:
+    // calcular las 6 permutaciones posibles de FincaPeque manualmente:
     // T0(10,3,4), T1(5,3,3), T2(2,2,1). Dists: 0-1(2), 1-2(2), 0-2(4)
 
     // 1. (0,1,2): Riego 16 + Mov 4 = 20
@@ -287,10 +265,6 @@ class RiegoOptimoTest extends AnyFunSuite {
   }
 
   test("Optimo Test 2: Finca PDF vs Ejemplo 1 y 2") {
-    // El PDF dice:
-    // Prog 1 costo: 45
-    // Prog 2 costo: 38
-    // El algoritmo debe encontrar algo <= 38.
     val (prog, costo) = ProgramacionRiegoOptimo(fincaPDF, distPDF)
     assert(costo <= 38)
   }
@@ -342,10 +316,6 @@ class RiegoOptimoTest extends AnyFunSuite {
       Vector(100, 100, 0)
     )
     val (prog, costo) = ProgramacionRiegoOptimo(f, d)
-    // Esperamos que NO elija el camino que cruza entre los lejanos innecesariamente
-    // Costo esperado riego: ~297. Costo mov minimo: 101.
-    // Total aprox 398.
-    // Verificamos que no sea el camino malo.
     assert(prog != Vector(0, 2, 1) && prog != Vector(1, 2, 0))
   }
 }
