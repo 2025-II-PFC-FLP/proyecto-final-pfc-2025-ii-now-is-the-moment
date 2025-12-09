@@ -143,11 +143,7 @@ Sea:
 
 Debe cumplirse:
 $$
-\text{costoRiegoTablon}(i, f, \pi) =
-\begin{cases}
-t_s - (t_{\text{Inicio}} + t_r) & \text{si } t_s - t_r \ge t_{\text{Inicio}} \\
-p \cdot ((t_{\text{Inicio}} + t_r) - t_s) & \text{si } t_s - t_r < t_{\text{Inicio}}
-\end{cases}
+\text{costoRiegoTablon}(i, f, \pi) = \begin{cases} t_s - (t_{\text{Inicio}} + t_r) & \text{si } t_s - t_r \ge t_{\text{Inicio}} \\ p \cdot ((t_{\text{Inicio}} + t_r) - t_s) & \text{si } t_s - t_r < t_{\text{Inicio}} \end{cases}
 $$
 ### Argumento de corrección
 1. Se obtienen los tiempos de inicio `t` usando `tIR(f, pi)`.

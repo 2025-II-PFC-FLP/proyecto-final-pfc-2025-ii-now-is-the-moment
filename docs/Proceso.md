@@ -8,7 +8,7 @@ $$F=\langle T_{0},T_{1},…,T_{n-1} \rangle$$
 donde cada tablón $T_{i}$ se define como:
 $$T_{i}=\langle ts_i^F, tr_i^F, p_i^F \rangle$$
 donde:
-- $ts_i^F$ es el tiempo que tarda el sistema móvil en llegar al tablón $T_{i}$ desde su posición anterior.
+- $ts_i^F$ es el tiempo máximo que puede estar el tablón $T_{i}$ sin recibir agua.
 - $tr_i^F$ es el tiempo que tarda el sistema móvil en regar el tablón $T_{i}$.
 - $p_i^F$ es la prioridad del tablón $T_{i}$, que indica la urgencia de riego.
 
@@ -83,7 +83,7 @@ Se implementó una función para generar una finca aleatoria con un número dado
 - **Salida:** Una finca representada como un vector de tablones con valores aleatorios para tiempo de llegada, tiempo de riego y prioridad.
 ### Explicación breve del código
 La función `fincaAlAzar` utiliza `Vector.fill(long)` para crear un vector de tamaño `long`. Para cada posición del vector, genera una tupla que representa un tablón con valores aleatorios:
-- `ts`: Tiempo de llegada, generado como un número aleatorio entre 1 y `long * 2`.
+- `ts`: Tiempo máximo sin recibir agua, generado como un número aleatorio entre 1 y `long * 2`.
 - `tr`: Tiempo de riego, generado como un número aleatorio entre 1 y `long`.
 - `p`: Prioridad, generada como un número aleatorio entre 1 y 4.
 
@@ -270,7 +270,7 @@ def costoRiegoTablon(i: Int, f: Finca, pi: ProgRiego): Int = {
 ### Explicación breve del código
 La función `costoRiegoTablon` primero calcula los tiempos de inicio de riego para todos los tablones utilizando la función `tIR`. Luego, obtiene el tiempo de inicio de riego para el tablón `i`, así como sus parámetros `ts`, `tr` y `p`.
 A continuación, aplica la fórmula del costo de riego:
-- Si el tiempo de llegada `ts` menos el tiempo de riego `tr` es mayor o igual al tiempo de inicio `tInicio`, el costo es la diferencia entre `ts` y la suma de `tInicio` y `tr`.
+- Si el tiempo máximo que puede estar el tablón sin recibir agua `ts` menos el tiempo de riego `tr` es mayor o igual al tiempo de inicio `tInicio`, el costo es la diferencia entre `ts` y la suma de `tInicio` y `tr`.
 - De lo contrario, el costo es la prioridad `p` multiplicada por la diferencia entre la suma de `tInicio` y `tr` y `ts`.
   Finalmente, la función retorna el costo calculado para el tablón `i`.
 ### Ejecución paso a paso
@@ -325,15 +325,15 @@ flowchart TD
 ### Prueba de validación
 Se probó la función con una finca y una programación específicas, verificando que el costo total de riego fuera correcto:
 ```Scala
-val finca: Finca = Vector((2, 3, 1), (1, 2, 2), (3, 1, 3))
+val finca: Finca = Vector((5, 2, 1), (4, 1, 3), (8, 3, 2))
 val progRiego: ProgRiego = Vector(0, 1, 2)
 val costoTotal = costoRiegoFinca(finca, progRiego)
-assert(costoTotal == 5, s"Costo total incorrecto: $costoTotal")
+assert(costoTotal == 6, s"Costo total de riego incorrecto: $costoTotal")
 println("Costo total de riego calculado correctamente:")
 println(costoTotal)
 ```
 ### Resultado esperado
-Al ejecutar la prueba, se espera que no haya errores de aserción y que se imprima el costo total de riego como `5`.
+Al ejecutar la prueba, se espera que no haya errores de aserción y que se imprima el costo total de riego como `6`.
 ### Conclusión
 La función `costoRiegoFinca` permite calcular de manera eficiente el costo total de riego de la finca en una programación dada, facilitando la evaluación del desempeño del algoritmo de riego óptimo.
 ### 2.6 Costo de movilidad
@@ -522,7 +522,7 @@ flowchart TD
 ### Prueba de validación
 Se probó la función con una finca y una matriz de distancias específicas, verificando que la programación óptima y su costo fueran correctos:
 ```Scala
-val finca: Finca = Vector((2, 3, 1), (1, 2, 2), (3, 1, 3))
+val finca: Finca = Vector((5, 2, 1), (4, 1, 3), (8, 3, 2))
 val distancia: Distancia = Vector(
   Vector(0, 5, 10),
   Vector(5, 0, 3),
@@ -530,12 +530,21 @@ val distancia: Distancia = Vector(
 )
 val (progOptima, costoOptimo) = ProgramacionRiegoOptimo(finca, distancia)
 assert(progOptima == Vector(1, 0, 2), s"Programación óptima incorrecta: $progOptima")
-assert(costoOptimo == 7, s"Costo óptimo incorrecto: $costoOptimo")
-println("Programación de riego óptima y costo calculados correctamente:")
-println(s"Programación: $progOptima, Costo: $costoOptimo")
+val todas = generarProgramacionesRiego(finca)
+val costos = todas.map(pi => costoRiegoFinca(finca, pi) + costoMovilidad(finca, pi, distancia))
+
+assert(costoOptimo == costos.min,
+  s"El costo óptimo devuelto ($costoOptimo) no coincide con el mínimo real (${costos.min})")
+
+val mejoresProgramaciones = todas.zip(costos).filter(_._2 == costos.min).map(_._1)
+assert(mejoresProgramaciones.contains(progOptima),
+  s"La programación devuelta $progOptima no es una de las óptimas: $mejoresProgramaciones")
+
+println("Programación óptima validada correctamente.")
+println(s"Mejor programación encontrada: $progOptima con costo $costoOptimo")
 ```
 ### Resultado esperado
-Al ejecutar la prueba, se espera que no haya errores de aserción y que se imprima la programación de riego óptima como `Vector(1, 0, 2)` y el costo óptimo como `7`.
+Al ejecutar la prueba. La función debe devolver una programación cuya suma de `costoRiegoFinca + costoMovilidad` sea igual al costo mínimo obtenido entre todas las permutaciones posibles.
 ### Conclusión
 La función `ProgramacionRiegoOptimo` permite encontrar de manera eficiente la programación de riego que minimiza el costo total, facilitando la optimización del sistema de riego en la finca.
 
