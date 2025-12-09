@@ -162,14 +162,13 @@ flowchart TD
 Se probó la función generando matrices de distancias de diferentes tamaños y verificando las propiedades esperadas:
 ```Scala
 val distancia = distanciaAlAzar(5)
-for (i <- distancia.indices; j <- distancia.indices) {
-  if (i == j) {
-    assert(distancia(i)(j) == 0, s"Distancia a sí mismo no es cero: ${distancia(i)(j)}")
-  } else {
-    assert(distancia(i)(j) == distancia(j)(i), s"Distancia no es simétrica: ${distancia(i)(j)} != ${distancia(j)(i)}")
-    assert(distancia(i)(j) >= 1 && distancia(i)(j) <= 15, s"Distancia fuera de rango: ${distancia(i)(j)}")
-    }
-}
+val valida = distancia.indices.forall { i =>
+  distancia.indices.forall { j =>
+    if (i == j) distancia(i)(j) == 0                 
+    else distancia(i)(j) == distancia(j)(i) &&          
+      distancia(i)(j) >= 1 && distancia(i)(j) <= 15 }}
+assert(valida, "La matriz no cumple las propiedades esperadas")
+
 println("Matriz de distancias generada correctamente:")
 distancia.foreach(row => println(row.mkString(", ")))
 ```
